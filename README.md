@@ -46,6 +46,35 @@ Alternatively, create a database and user with the InfluxDB shell:
 ```
 
 
+Example Kubernetes pod YAML
+---------------------------
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    name: influx
+  name: influx
+spec:
+  containers:
+  - image: sumglobal/rpi-influxdb
+    name: influx
+    env:
+    - name: PRE_CREATE_DB
+      value: metar
+    ports:
+    - name: influx
+      containerPort: 8086
+      hostPort: 8086
+    volumeMounts:
+      - mountPath: /data
+        name: influx-persistent-storage
+  volumes:
+    - name: influx-persistent-storage
+      persistentVolumeClaim:
+        claimName: data-claim2
+```
+
 Credits
 -------
 [This docker image was based upon the hypriot-image](https://github.com/hypriot/influxdb)
